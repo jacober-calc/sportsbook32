@@ -1,3 +1,5 @@
+![Social Media Preview](assets/sportsbook32_social_preview.png)
+
 # SPORTSBOOK Statefile
 
 ## CONTENTS
@@ -30,6 +32,8 @@ The program enables bettors to:
 ### 1.2 System Requirements
 
 SwissMicros DM32 calculator with RPN operating system. Program requires 131 program steps in 8 labels. No equations, flags, or indirect registers are used.
+
+The program uses only functions found on the HP-32SII and requires about 270 bytes including variables, so it can also be keyed into an HP-32SII from the listing in section 9. The Statefile itself loads only on the DM32.
 
 ### 1.3 Install and Download
 
@@ -65,6 +69,10 @@ Underdog:   B = 100 ÷ (U + 100)
 
 Where F is the favorite's odds without the minus sign and U is the underdog's odds.
 
+Both curves meet at 50%, where −100 and +100 describe the same even-money price. The further the odds move from ±100, the more lopsided the implied probability.
+
+![Implied probability from American odds](assets/implied_probability.svg)
+
 #### Overround (Bookmaker's Margin)
 
 ```
@@ -82,6 +90,10 @@ Underdog:   B × 100 ÷ (A + B)
 
 Dividing each implied probability by their total removes the margin, so the two fair probabilities total exactly 100%.
 
+The chart shows both markets from section 7. In each, the implied probabilities overflow 100% by the overround; dividing by the total scales them back so that they fill exactly 100%.
+
+![Removing the margin](assets/no_vig.svg)
+
 #### Profit
 
 ```
@@ -90,6 +102,8 @@ Negative odds:   W = Stake × 100 ÷ |O|
 ```
 
 W is the profit on a winning wager. The total return is W plus the stake.
+
+![Profit on a winning 100 stake](assets/profit.svg)
 
 #### Odds Conversion
 
@@ -101,9 +115,25 @@ Decimal to American:   O = (d − 1) × 100      (d ≥ 2)
                        O = −100 ÷ (d − 1)     (d < 2)
 ```
 
+Decimal odds of 2.00 mark the change of sign: below 2 the American odds are negative, and at 2 or above they are positive.
+
+![Decimal and American odds](assets/odds_conversion.svg)
+
 ### 3.3 Program Logic Flow
 
 The no-vig program (LBL O) takes the favorite's odds from the Y-register and the underdog's odds from the X-register.
+
+```mermaid
+flowchart TD
+    nIn["Y: favorite odds without sign<br/>X: underdog odds"] --> nT{"Are the two odds equal?"}
+    nT -- "Yes" --> nZ["LBL Z: implied probability of one side<br/>overround V, fair odds 50 and 50"]
+    nT -- "No" --> nF["Store U and F"]
+    nF --> nA["Implied probabilities A and B"]
+    nA --> nV["Overround V"]
+    nV --> nN["Fair odds: A and B divided by their total"]
+    nN --> nOut["Z: overround, Y: favorite fair %, X: underdog fair %"]
+    nZ --> nOut2["Z: overround, Y: 50, X: 50"]
+```
 
 **Program Flow:**
 1. Test whether the two odds are equal

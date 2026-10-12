@@ -1,0 +1,152 @@
+# STACK
+
+# REGS
+
+# FLAGS
+
+# SEED
+
+# MODE
+MTRIG: DEG
+MFMT: FIX 6
+
+# EQUATION LIST
+EQNPTR: 0
+EQN
+EQNEND
+
+# PROGRAM
+PTR: 0
+PGM
+  LBL O
+  x=y?
+  GTO Z
+  STO U
+  R\down;
+  STO F
+  RCL F
+  100
+  +
+  \div;
+  STO A
+  RCL U
+  100
+  x<>y
+  100
+  +
+  \div;
+  STO B
+  RCL A
+  +
+  STO Y
+  100
+  \mul;
+  100
+  -
+  STO V
+  RCL A
+  RCL Y
+  \div;
+  100
+  \mul;
+  STO A
+  RCL B
+  RCL Y
+  \div;
+  100
+  \mul;
+  STO B
+  CLx
+  ENTER
+  RCL V
+  RCL A
+  RCL B
+  RTN
+  LBL Z
+  STO U
+  RCL U
+  100
+  +
+  \div;
+  STO A
+  RCL A
+  +
+  100
+  \mul;
+  100
+  -
+  STO V
+  CLx
+  ENTER
+  RCL V
+  50
+  50
+  RTN
+  LBL P
+  STO B
+  R\down;
+  STO O
+  x<0?
+  GTO Y
+  R\up;
+  \mul;
+  100
+  \div;
+  STO W
+  CLx
+  ENTER
+  ENTER
+  ENTER
+  RCL W
+  RTN
+  LBL Y
+  +/-
+  R\up;
+  x<>y
+  \div;
+  100
+  \mul;
+  STO W
+  CLx
+  ENTER
+  ENTER
+  ENTER
+  RCL W
+  RTN
+  LBL A
+  2
+  x\le;y?
+  GTO B
+  CLx
+  R\down;
+  1
+  -
+  -100
+  x<>y
+  \div;
+  RTN
+  LBL B
+  CLx
+  R\down;
+  1
+  -
+  100
+  \mul;
+  RTN
+  LBL D
+  x\le;0?
+  GTO C
+  100
+  \div;
+  1
+  +
+  RTN
+  LBL C
+  1
+  x<>y
+  100
+  x<>y
+  \div;
+  -
+  RTN
+PGMEND
